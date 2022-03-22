@@ -115,24 +115,28 @@ function! fern_preview#half_up() abort
   call s:Window.scroll(winid, info.topline - info.height / 2)
 endfunction
 
-function! fern_preview#width_default_func() abort
-  let width = float2nr(&columns * 0.8)
-  return width
-endfunction
+let s:STATUS_EXPANDED = g:fern#STATUS_EXPANDED
 
-function! fern_preview#height_default_func() abort
-  let height = float2nr(&lines * 0.8)
-  return height
+function! fern_preview#width_default_func() abort
+  let fern_stuff_width = 56
+  let remaining_width = &columns - fern_stuff_width
+  let full_window_width = 191 
+  return full_window_width - fern_stuff_width - 1
 endfunction
 
 function! fern_preview#left_default_func() abort
-  let left = (&columns - call(g:fern_preview_window_calculator.width, [])) / 2
-  return left
+  let fern_stuff_width = 56
+  return fern_stuff_width
+endfunction
+
+function! fern_preview#height_default_func() abort
+  let full_height = &lines
+  return full_height - 3
 endfunction
 
 function! fern_preview#top_default_func() abort
-  let top = ((&lines - call(g:fern_preview_window_calculator.height, [])) / 2) - 1
-  return top
+  let top = ((&lines - call(g:fern_preview_window_calculator.height, [])) / 2)
+  return 0
 endfunction
 
 function! s:open_preview(path) abort
