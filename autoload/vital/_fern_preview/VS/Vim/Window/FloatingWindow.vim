@@ -409,6 +409,7 @@ else
     \   'firstline': l:style.topline,
     \   'padding': [0, 0, 0, 0],
     \   'border': has_key(l:style, 'border') ? [1, 1, 1, 1] : [0, 0, 0, 0],
+    \   'borderhighlight': ["FernPreviewBorder"],
     \   'borderchars': get(l:style, 'border', []),
     \   'fixed': v:true,
     \ }
