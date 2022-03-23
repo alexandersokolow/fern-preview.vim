@@ -106,12 +106,8 @@ function! s:scroll(winid, topline) abort
   function! l:ctx.callback(winid, topline) abort
     let l:wininfo = s:info(a:winid)
     let l:topline = a:topline
-    let l:topline = min([l:topline, line('$') - l:wininfo.height + 1])
+    let l:topline = min([l:topline, line('$') - l:wininfo.height + 3])
     let l:topline = max([l:topline, 1])
-
-    if l:topline == l:wininfo.topline
-      return
-    endif
 
     if !has('nvim') && s:is_floating(a:winid)
       call popup_setoptions(a:winid, {
