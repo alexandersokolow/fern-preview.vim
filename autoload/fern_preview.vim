@@ -6,23 +6,6 @@ let s:win = s:FloatingWindow.new()
 
 call s:win.set_var('&number', 1)
 
-function! DisableFernPreviewIfInSplit()
-  let cur_tabnr = tabpagenr()
-  let w_info = getwininfo()
-  let windows_cur_tab = []
-  for w in w_info
-    if w.tabnr == cur_tabnr
-      call add(windows_cur_tab, w)
-    endif
-  endfor
-  let num_splits = len(windows_cur_tab)
-  if num_splits > 1
-    call fern_preview#close()
-    let g:fern_auto_preview = v:false
-  endif
-endfunction
-autocmd WinEnter * call DisableFernPreviewIfInSplit()
-
 if has('nvim')
   call s:win.set_var('&winhighlight', 'NormalFloat:Normal')
 else
@@ -245,3 +228,20 @@ function! s:is_binary(path) abort
 
   return v:false
 endfunction
+
+function! DisableFernPreviewIfInSplit()
+  let cur_tabnr = tabpagenr()
+  let w_info = getwininfo()
+  let windows_cur_tab = []
+  for w in w_info
+    if w.tabnr == cur_tabnr
+      call add(windows_cur_tab, w)
+    endif
+  endfor
+  let num_splits = len(windows_cur_tab)
+  if num_splits > 1
+    call fern_preview#close()
+    let g:fern_auto_preview = v:false
+  endif
+endfunction
+autocmd WinEnter * call DisableFernPreviewIfInSplit()
