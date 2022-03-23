@@ -24,6 +24,11 @@ function! fern_preview#disable_auto_preview() abort
   let g:fern_auto_preview = v:false
 endfunction
 
+function! fern_preview#disable_auto_preview_and_close() abort
+  let g:fern_auto_preview = v:false
+  call fern_preview#close()
+endfunction
+
 function! fern_preview#enable_auto_preview() abort
   let g:fern_auto_preview = v:true
 endfunction
