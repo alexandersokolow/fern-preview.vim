@@ -55,48 +55,51 @@ function! fern_preview#fern_open_or_change_dir() abort
 endfunction
 
 function! fern_preview#open() abort
-  let helper = fern#helper#new()
-  if helper.sync.get_scheme() !=# 'file'
-    return
-  endif
+  try
+    let helper = fern#helper#new()
+    if helper.sync.get_scheme() !=# 'file'
+      return
+    endif
 
-  let path = helper.sync.get_cursor_node()['_path']
+    let path = helper.sync.get_cursor_node()['_path']
 
-  if !has('nvim')
-    let s:line = line('.')
-  endif
-  call s:define_autocmd()
+    if !has('nvim')
+      let s:line = line('.')
+    endif
+    call s:define_autocmd()
 
-  if isdirectory(path)
-    call fern_preview#close()
-    return
-  endif
+    if isdirectory(path)
+      call fern_preview#close()
+      return
+    endif
 
-  if s:is_ignore_filetype(path)
-    call fern_preview#close()
-    echohl WarningMsg
-    echomsg 'Ignore filetype: ' . path
-    echohl None
-    return
-  endif
+    if s:is_ignore_filetype(path)
+      call fern_preview#close()
+      echohl WarningMsg
+      echomsg 'Ignore filetype: ' . path
+      echohl None
+      return
+    endif
 
-  if s:is_binary(path)
-    call fern_preview#close()
-    echohl WarningMsg
-    echomsg 'Binary file: ' . path
-    echohl None
-    return
-  endif
+    if s:is_binary(path)
+      call fern_preview#close()
+      echohl WarningMsg
+      echomsg 'Binary file: ' . path
+      echohl None
+      return
+    endif
 
-  if !s:is_valid_filesize(path)
-    call fern_preview#close()
-    echohl WarningMsg
-    echomsg 'Too large filesize: ' . path
-    echohl None
-    return
-  endif
+    if !s:is_valid_filesize(path)
+      call fern_preview#close()
+      echohl WarningMsg
+      echomsg 'Too large filesize: ' . path
+      echohl None
+      return
+    endif
 
-  call s:open_preview(path)
+    call s:open_preview(path)
+  catch /.*/
+  endtry
 endfunction
 
 function! fern_preview#close() abort
