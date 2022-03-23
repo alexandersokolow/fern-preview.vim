@@ -30,7 +30,11 @@ function! fern_preview#disable_auto_preview_and_close() abort
 endfunction
 
 function! fern_preview#enable_auto_preview() abort
-  let g:fern_auto_preview = v:true
+  let num_splits = s:get_splits_num()
+  if num_splits < 2
+    let g:fern_auto_preview = v:true
+    call fern_preview#open()
+  endif
 endfunction
 
 function! fern_preview#toggle_auto_preview() abort
@@ -38,8 +42,11 @@ function! fern_preview#toggle_auto_preview() abort
     let g:fern_auto_preview = v:false
     call fern_preview#close()
   else
-    let g:fern_auto_preview = v:true
-    call fern_preview#open()
+    let num_splits = s:get_splits_num()
+    if num_splits < 2
+      let g:fern_auto_preview = v:true
+      call fern_preview#open()
+    endif
   endif
 endfunction
 
@@ -60,6 +67,10 @@ function! fern_preview#fern_open_or_change_dir() abort
 endfunction
 
 function! fern_preview#open() abort
+  let num_splits = s:get_splits_num()
+  if num_splits > 1
+    return
+  endif
   try
     let helper = fern#helper#new()
     if helper.sync.get_scheme() !=# 'file'
@@ -229,7 +240,7 @@ function! s:is_binary(path) abort
   return v:false
 endfunction
 
-function! DisableFernPreviewIfInSplit()
+function! s:get_splits_num()
   let cur_tabnr = tabpagenr()
   let w_info = getwininfo()
   let windows_cur_tab = []
@@ -239,9 +250,14 @@ function! DisableFernPreviewIfInSplit()
     endif
   endfor
   let num_splits = len(windows_cur_tab)
+  return num_splits
+endfunction
+
+function! s:disable_preview_if_split()
+  let num_splits = s:get_splits_num()
   if num_splits > 1
     call fern_preview#close()
     let g:fern_auto_preview = v:false
   endif
 endfunction
-autocmd WinEnter * call DisableFernPreviewIfInSplit()
+autocmd WinEnter * call s:disable_preview_if_split()
