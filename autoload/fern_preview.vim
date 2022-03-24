@@ -137,14 +137,14 @@ endfunction
 let s:STATUS_EXPANDED = g:fern#STATUS_EXPANDED
 
 function! fern_preview#width_default_func() abort
-  let fern_stuff_width = 56
+  let fern_stuff_width = 60
   let remaining_width = &columns - fern_stuff_width
   let full_window_width = 191 
   return full_window_width - fern_stuff_width - 1
 endfunction
 
 function! fern_preview#left_default_func() abort
-  let fern_stuff_width = 56
+  let fern_stuff_width = 60
   return fern_stuff_width
 endfunction
 
