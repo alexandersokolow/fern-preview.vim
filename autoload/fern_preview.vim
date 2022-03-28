@@ -123,15 +123,21 @@ function! fern_preview#close() abort
 endfunction
 
 function! fern_preview#half_down() abort
-  let winid = s:win.get_winid()
-  let info = s:Window.info(winid)
-  call s:Window.scroll(winid, info.topline + info.height / 2)
+  try
+    let winid = s:win.get_winid()
+    let info = s:Window.info(winid)
+    call s:Window.scroll(winid, info.topline + info.height / 2)
+  catch /.*/
+  endtry
 endfunction
 
 function! fern_preview#half_up() abort
-  let winid = s:win.get_winid()
-  let info = s:Window.info(winid)
-  call s:Window.scroll(winid, info.topline - info.height / 2)
+  try
+    let winid = s:win.get_winid()
+    let info = s:Window.info(winid)
+    call s:Window.scroll(winid, info.topline - info.height / 2)
+  catch /.*/
+  endtry
 endfunction
 
 let s:STATUS_EXPANDED = g:fern#STATUS_EXPANDED
