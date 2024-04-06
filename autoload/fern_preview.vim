@@ -187,6 +187,8 @@ function! s:open_preview(path) abort
   \   'topline': 1,
   \   'border': v:true,
   \ })
+
+  call SetFernTitlestring()
 endfunction
 
 function! s:cursor_moved() abort
