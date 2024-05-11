@@ -116,7 +116,9 @@ function! s:scroll(winid, topline) abort
     else
       let l:delta = l:topline - l:wininfo.topline
       let l:key = l:delta > 0 ? "\<C-e>" : "\<C-y>"
-      execute printf('noautocmd silent normal! %s', repeat(l:key, abs(l:delta)))
+      if l:delta != "0" && l:delta != 0
+        execute printf('noautocmd silent normal! %s', repeat(l:key, abs(l:delta)))
+      endif
     endif
   endfunction
   call s:do(a:winid, { -> l:ctx.callback(a:winid, a:topline) })

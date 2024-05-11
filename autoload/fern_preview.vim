@@ -143,15 +143,25 @@ endfunction
 let s:STATUS_EXPANDED = g:fern#STATUS_EXPANDED
 
 function! fern_preview#width_default_func() abort
-  let fern_stuff_width = 60
-  let remaining_width = &columns - fern_stuff_width
-  let full_window_width = 191 
-  return full_window_width - fern_stuff_width - 1
+  if has('nvim')
+    let fern_stuff_width = 60
+    let remaining_width = &columns - fern_stuff_width
+    let full_window_width = 194 
+    return full_window_width - fern_stuff_width - 1
+  else
+    let fern_stuff_width = 60
+    let remaining_width = &columns - fern_stuff_width
+    let full_window_width = 191 
+    return full_window_width - fern_stuff_width - 1
+  endif
 endfunction
 
 function! fern_preview#left_default_func() abort
-  let fern_stuff_width = 60
-  return fern_stuff_width
+  if has('nvim')
+    return 70
+  else
+    return 60
+  endif
 endfunction
 
 function! fern_preview#height_default_func() abort
@@ -160,8 +170,11 @@ function! fern_preview#height_default_func() abort
 endfunction
 
 function! fern_preview#top_default_func() abort
-  let top = ((&lines - call(g:fern_preview_window_calculator.height, [])) / 2)
-  return 0
+  if has('nvim')
+    return 4
+  else
+    return 0
+  endif
 endfunction
 
 function! s:open_preview(path) abort
@@ -185,13 +198,14 @@ function! s:open_preview(path) abort
   \   'width': width,
   \   'height': height,
   \   'topline': 1,
-  \   'border': v:true,
+  \   'border': v:false,
   \ })
 
   call SetFernTitlestring()
 endfunction
 
 function! s:cursor_moved() abort
+
   if &filetype !=# 'fern'
     autocmd! fern-preview-control-window * <buffer>
     return
@@ -201,11 +215,13 @@ function! s:cursor_moved() abort
     return
   endif
 
+
   if !has('nvim') && !g:fern_auto_preview
     autocmd! fern-preview-control-window * <buffer>
   endif
 
   if g:fern_auto_preview
+    call fern_preview#close()
     call fern_preview#open()
   else
     call fern_preview#close()
