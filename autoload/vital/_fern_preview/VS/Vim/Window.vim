@@ -45,20 +45,24 @@ endfunction
 if has('nvim')
   function! s:info(winid) abort
     let l:info = getwininfo(a:winid)[0]
+    let l:lines = line('$', a:winid)
     return {
     \   'width': l:info.width,
     \   'height': l:info.height,
     \   'topline': l:info.topline,
+    \   'lines': l:lines,
     \ }
   endfunction
 else
   function! s:info(winid) abort
     if s:is_floating(a:winid)
       let l:info = popup_getpos(a:winid)
+      let l:lines = line('$', a:winid)
       return {
       \   'width': l:info.width,
       \   'height': l:info.height,
-      \   'topline': l:info.firstline
+      \   'topline': l:info.firstline,
+      \   'lines': l:lines,
       \ }
     endif
 
@@ -68,6 +72,7 @@ else
       let self.info.width = winwidth(0)
       let self.info.height = winheight(0)
       let self.info.topline = line('w0')
+      let self.info.lines = line('$', a:winid)
     endfunction
     call s:do(a:winid, { -> l:ctx.callback() })
     return l:ctx.info

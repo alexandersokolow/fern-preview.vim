@@ -140,6 +140,28 @@ function! fern_preview#half_up() abort
   endtry
 endfunction
 
+function! fern_preview#top() abort
+  try
+    let winid = s:win.get_winid()
+    let info = s:Window.info(winid)
+    call s:Window.scroll(winid, 0)
+  catch /.*/
+  endtry
+endfunction
+
+function! fern_preview#bottom() abort
+  try
+    let winid = s:win.get_winid()
+    let info = s:Window.info(winid)
+    try
+      call s:Window.scroll(winid, max([0, info.lines - info.height + 1]))
+    catch /.*/
+      echo "Caught error: " . v:exception
+    endtry
+  catch /.*/
+  endtry
+endfunction
+
 let s:STATUS_EXPANDED = g:fern#STATUS_EXPANDED
 
 function! fern_preview#width_default_func() abort
