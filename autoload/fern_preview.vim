@@ -221,7 +221,9 @@ function! s:cursor_moved() abort
   endif
 
   if g:fern_auto_preview
-    call fern_preview#close()
+    if has('nvim')
+      call fern_preview#close()
+    endif
     call fern_preview#open()
   else
     call fern_preview#close()
