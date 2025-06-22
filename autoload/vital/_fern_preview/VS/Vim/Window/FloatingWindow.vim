@@ -87,53 +87,6 @@ function! s:FloatingWindow.new(args) abort
 endfunction
 
 "
-" get_size
-"
-" @param {number?} args.minwidth
-" @param {number?} args.maxwidth
-" @param {number?} args.minheight
-" @param {number?} args.maxheight
-" @param {boolean?} args.wrap
-"
-function! s:FloatingWindow.get_size(args) abort
-  if self._bufnr is# v:null
-    throw 'VS.Vim.Window.FloatingWindow: Failed to detect bufnr.'
-  endif
-
-  let l:maxwidth = get(a:args, 'maxwidth', -1)
-  let l:minwidth = get(a:args, 'minwidth', -1)
-  let l:maxheight = get(a:args, 'maxheight', -1)
-  let l:minheight = get(a:args, 'minheight', -1)
-  let l:lines = getbufline(self._bufnr, '^', '$')
-
-  " width
-  let l:width = 0
-  for l:line in l:lines
-    let l:width = max([l:width, strdisplaywidth(l:line)])
-  endfor
-
-  let l:width = l:minwidth == -1 ? l:width : max([l:minwidth, l:width])
-  let l:width = l:maxwidth == -1 ? l:width : min([l:maxwidth, l:width])
-
-  " height
-  if get(a:args, 'wrap', get(self._vars, '&wrap', 0))
-    let l:height = 0
-    for l:line in l:lines
-      let l:height += max([1, float2nr(ceil(strdisplaywidth(l:line) / str2float('' . l:width)))])
-    endfor
-  else
-    let l:height = len(l:lines)
-  endif
-  let l:height = l:minheight == -1 ? l:height : max([l:minheight, l:height])
-  let l:height = l:maxheight == -1 ? l:height : min([l:maxheight, l:height])
-
-  return {
-  \   'width': max([1, l:width]),
-  \   'height': max([1, l:height]),
-  \ }
-endfunction
-
-"
 " set_bufnr
 "
 " @param {number} bufnr
