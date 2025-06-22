@@ -154,7 +154,11 @@ function! fern_preview#bottom() abort
     let winid = s:win.get_winid()
     let info = s:Window.info(winid)
     try
-      call s:Window.scroll(winid, max([0, info.lines - info.height + 1]))
+      if has('nvim')
+        call s:Window.scroll(winid, max([0, info.lines - info.height + 3]))
+      else
+        call s:Window.scroll(winid, max([0, info.lines - info.height + 1]))
+      endif
     catch /.*/
       echo "Caught error: " . v:exception
     endtry
