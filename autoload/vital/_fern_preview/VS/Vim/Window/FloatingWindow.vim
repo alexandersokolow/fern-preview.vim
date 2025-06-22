@@ -328,11 +328,14 @@ if has('nvim')
   function! s:_style(style) abort
     let l:style = s:_resolve_origin(a:style)
     let l:style = s:_resolve_border(l:style)
+    let l:fern_width = 60
+    let l:avail_width = min([max([winwidth(0) - l:fern_width, 1]), l:style.width])
     let l:style = {
     \   'relative': 'editor',
     \   'row': l:style.row - 1,
     \   'col': l:style.col - 1,
-    \   'width': l:style.width,
+    \   'width': avail_width,
+    "\   'width': l:style.width,
     \   'height': l:style.height,
     \   'focusable': v:true,
     \   'style': 'minimal',
